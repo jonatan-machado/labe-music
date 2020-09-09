@@ -1,4 +1,4 @@
-import { startOfHour } from 'date-fns';
+import HashManager from '../utils/hashManager';
 import { getCustomRepository } from 'typeorm';
 
 import User from '../models/User';
@@ -40,11 +40,15 @@ class CreateAppointmentService {
       throw Error('password very simple');
     }
 
+    const passwordHash = new HashManager();
+
+    const hash = await passwordHash.hash(password);
+
     const user = userRepository.create({
       name,
       email,
       nickname,
-      password,
+      password: hash,
     });
 
     await userRepository.save(user);
