@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
-import { parseISO } from 'date-fns';
 
 import UserRepository from '../repositories/UserRepository';
 import CreateUserService from '../services/CreateUserService';

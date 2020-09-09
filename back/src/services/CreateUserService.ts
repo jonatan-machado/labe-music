@@ -26,12 +26,6 @@ class CreateAppointmentService {
       throw Error('This nickname already exists');
     }
 
-    const findUserEmail = userRepository.findbyEmail(email);
-
-    if (!findUserEmail) {
-      throw Error('This email already exists');
-    }
-
     if (name === '' || email === '' || nickname === '' || password === '') {
       throw Error('Fields not empty');
     }
@@ -39,21 +33,25 @@ class CreateAppointmentService {
     if (password.length <= 6) {
       throw Error('password very simple');
     }
+    const findUserEmail = await userRepository.findbyEmail(email);
+    if (findUserEmail) {
+      throw Error('This email already exists');
+    } else {
+      const passwordHash = new HashManager();
 
-    const passwordHash = new HashManager();
+      const hash = await passwordHash.hash(password);
 
-    const hash = await passwordHash.hash(password);
+      const user = userRepository.create({
+        name,
+        email,
+        nickname,
+        password: hash,
+      });
 
-    const user = userRepository.create({
-      name,
-      email,
-      nickname,
-      password: hash,
-    });
+      await userRepository.save(user);
 
-    await userRepository.save(user);
-
-    return user;
+      return user;
+    }
   }
 }
 
