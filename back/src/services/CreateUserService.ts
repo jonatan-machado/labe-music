@@ -11,7 +11,7 @@ interface Request {
   password: string;
 }
 
-class CreateAppointmentService {
+class CreateUserService {
   public async execute({
     name,
     email,
@@ -55,4 +55,4 @@ class CreateAppointmentService {
   }
 }
 
-export default CreateAppointmentService;
+export default CreateUserService;
